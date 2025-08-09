@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { counterSlice } from "./slices/counterSlice";
 import { CanvasSlice } from "./slices/canvasSlice";
+import { APIToolsSlice } from "./slices/ToolsForAPISlice";
 
 export const store = configureStore({
   reducer: {
-    counter: counterSlice.reducer,
-    canvasTab: CanvasSlice.reducer
+    canvasTab: CanvasSlice.reducer,
+    toolsForAPI: APIToolsSlice.reducer
   }
 })
 
