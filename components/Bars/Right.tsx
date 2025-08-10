@@ -13,9 +13,9 @@ export default function RightBar() {
   const artbordTab = useSelector( (state: any) => state.canvasTab.type);
   
   return (
-    <div className='w-auto h-full flex items-center justify-center absolute right-0 z-50'>
-
-      <div className='h-[350px] w-[50px] mr-[15px] bg-[#00226d33] border-1 rounded-full border-[#f3f3f3] overflow-hidden grid grid-rows-3items-center cursor-pointer'>
+    <div className='w-full h-full flex items-center justify-center absolute right-0 z-50'>
+      
+      <div className='h-[350px] w-[50px] mr-[15px] bg-[#00226d33] border-1 rounded-full border-[#f3f3f3] overflow-hidden grid grid-rows-3 items-center cursor-pointer absolute right-0'>
 
         <BarButton
           Icon={PiShareNetworkDuotone}
