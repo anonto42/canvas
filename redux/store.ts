@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { CanvasSlice } from "./slices/canvasSlice";
-import { APIToolsSlice } from "./slices/ToolsForAPISlice";
+import { SystemCanvasToolsSlice } from "./slices/ToolsForSystemCanvasSlice";
 
 export const store = configureStore({
   reducer: {
     canvasTab: CanvasSlice.reducer,
-    toolsForAPI: APIToolsSlice.reducer
+    toolsForSystemCanvas: SystemCanvasToolsSlice.reducer
   }
 })
 
