@@ -7,19 +7,30 @@ import { FaRegCircle, FaRegSquare } from 'react-icons/fa';
 import { IoIosArrowRoundBack } from 'react-icons/io';
 import { IoAddOutline } from 'react-icons/io5';
 import { MdOutlineDraw } from 'react-icons/md';
-import { CiText } from 'react-icons/ci';
+import { CiRoute, CiText } from 'react-icons/ci';
 import ToolsButton from '../BarButton/ToolsButton';
+import { VscWindow } from 'react-icons/vsc';
 import { setSelectedTool, setSelectedToolToArrow, setSelectedToolToDraw, setSelectedToolToEllipse, setSelectedToolToLine, setSelectedToolToRectangle, setSelectedToolToText, SystemCanvasToolsType } from '@/redux/slices/ToolsForSystemCanvasSlice';
+import { APICanvasToolsType, setSelectedToolOnAPI, setSelectedToolToArrowOnAPI, setSelectedToolToLineOnAPI, setSelectedToolToRectangleOnAPI } from '@/redux/slices/ToolsForAPISlice';
 
 export default function LeftBar() {
 
   const artbordTab = useSelector( (state: any) => state.canvasTab.type);
   const selectedTools = useSelector( (state: any) => state.toolsForSystemCanvas.selectedTool);
+  const selectedToolsAPI = useSelector( (state: any) => state.toolsForAPICanvas.selectedTool);
 
   return (
     <div className='absolute h-full w-auto flex justify-center items-center'>
       
-      <div className='h-[470px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-7 items-center cursor-pointer'>
+
+      {/* System Canvas Tools */}
+      <div
+        style={{
+          transition: 'left 0.3s ease-in-out', 
+          left: artbordTab === CanvasType.SYSTEM ? 0 : -150,
+        }}
+        className='h-[470px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-7 items-center cursor-pointer absolute'
+        >
 
         <ToolsButton
           key={SystemCanvasToolsType.SELECTION}
@@ -29,7 +40,7 @@ export default function LeftBar() {
           SetState={setSelectedTool}
           StateValue={selectedTools}
           ButtonValue={SystemCanvasToolsType.SELECTION}
-          ShortCartKey="A"
+          ShortCartKey="S"
         />
 
         <ToolsButton
@@ -56,8 +67,8 @@ export default function LeftBar() {
 
         <ToolsButton
           key={SystemCanvasToolsType.ARROW}
-          Icon={IoIosArrowRoundBack}
-          IconSize={34}
+          Icon={CiRoute}
+          IconSize={30}
           Title="Arrow Tool"
           SetState={setSelectedToolToArrow}
           StateValue={selectedTools}
@@ -97,6 +108,84 @@ export default function LeftBar() {
           ButtonValue={SystemCanvasToolsType.TEXT}
           ShortCartKey="T"
         />
+
+      </div>
+
+      {/* API Canvas Tools */}
+      <div 
+        style={{
+          transition: 'left 0.3s ease-in-out', 
+          left: artbordTab === CanvasType.API ? 0 : -150,
+        }}
+        className='h-[268.572px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-4 items-center cursor-pointer absolute'>
+    
+        <ToolsButton
+          key={APICanvasToolsType.TABLE}
+          Icon={VscWindow}
+          IconSize={24}
+          Title="Table Tool"
+          SetState={setSelectedToolOnAPI}
+          StateValue={selectedToolsAPI}
+          ButtonValue={APICanvasToolsType.TABLE}
+          ShortCartKey="W"
+          textSize="text-[10px]"
+        />
+
+        <ToolsButton
+          key={APICanvasToolsType.RETANGLE}
+          Icon={FaRegSquare}
+          IconSize={23}
+          Title="Rectangle Tool"
+          SetState={setSelectedToolToRectangleOnAPI}
+          StateValue={selectedToolsAPI}
+          ButtonValue={APICanvasToolsType.RETANGLE}
+          ShortCartKey="R"
+        />
+
+        <ToolsButton
+          key={APICanvasToolsType.ARROW}
+          Icon={CiRoute}
+          IconSize={30}
+          Title="Arrow Tool"
+          SetState={setSelectedToolToArrowOnAPI}
+          StateValue={selectedToolsAPI}
+          ButtonValue={APICanvasToolsType.ARROW}
+          ShortCartKey="A"
+        />
+
+        <ToolsButton
+          key={APICanvasToolsType.ENDPOINT}
+          Icon={CiText}
+          IconSize={23}
+          Title="Text Tool"
+          SetState={setSelectedToolToLineOnAPI}
+          StateValue={selectedToolsAPI}
+          ButtonValue={APICanvasToolsType.ENDPOINT}
+          ShortCartKey="T"
+        />
+        
+
+      </div>
+
+      {/* DB Canvas Tools */}
+      <div 
+        style={{
+          transition: 'left 0.3s ease-in-out', 
+          left: artbordTab === CanvasType.DATABASE ? 0 : -150,
+        }}
+        className='h-[470px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-7 absolute items-center cursor-pointer'>
+
+        <ToolsButton
+          key={APICanvasToolsType.ENDPOINT}
+          Icon={FaRegSquare}
+          IconSize={23}
+          Title="Rectangle Tool"
+          SetState={setSelectedToolToRectangle}
+          StateValue={selectedToolsAPI}
+          ButtonValue={APICanvasToolsType.ENDPOINT}
+          ShortCartKey="D"
+        />
+
 
       </div>
 

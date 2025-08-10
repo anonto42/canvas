@@ -2,6 +2,7 @@ import React from 'react'
 import { IconType } from 'react-icons';
 import { CanvasType } from '@/redux/slices/canvasSlice';
 import BarButton from './BarButton';
+import { APICanvasToolsType } from '@/redux/slices/ToolsForAPISlice';
 import { SystemCanvasToolsType } from '@/redux/slices/ToolsForSystemCanvasSlice';
 
 export default function ToolsButton(
@@ -14,7 +15,8 @@ export default function ToolsButton(
   ButtonValue,
   ShortCartKey,
   topBorder = false,
-  bottomBorder = false
+  bottomBorder = false,
+  textSize = 'text-xs'
 }: {
   Icon: IconType;
   IconSize: number;
@@ -23,8 +25,9 @@ export default function ToolsButton(
   ShortCartKey: string;
   topBorder?: boolean;
   bottomBorder?: boolean;
-  StateValue: CanvasType | SystemCanvasToolsType;
-  ButtonValue: CanvasType | SystemCanvasToolsType;
+  textSize?: string;
+  StateValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType;
+  ButtonValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType;
 }){
 
   return (
@@ -39,7 +42,7 @@ export default function ToolsButton(
         topBorder={topBorder}
         bottomBorder={bottomBorder}
       />
-      <span className='text-[#f3f3f3] text-xs absolute top-11 left-8'>{ShortCartKey}</span>
+      <span className={textSize + ' text-[#f3f3f3] absolute top-11 left-8'}>{ShortCartKey}</span>
     </div>
   )
 }

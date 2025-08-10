@@ -1,5 +1,6 @@
 import { CanvasType } from '@/redux/slices/canvasSlice';
-import { SystemCanvasToolsType } from '@/redux/slices/ToolsForSystemCanvasSlice';
+import { SystemCanvasToolsType } from '@/redux/slices/ToolsForAPISlice';
+import { APICanvasToolsType } from '@/redux/slices/ToolsForAPI/CavasSlice';
 import React from 'react';
 import { IconType } from 'react-icons';
 import { useDispatch } from 'react-redux';
@@ -20,8 +21,8 @@ export default function BarButton({
   SetState: any;
   topBorder?: boolean;
   bottomBorder?: boolean;
-  StateValue: CanvasType | SystemCanvasToolsType ;
-  ButtonValue: CanvasType | SystemCanvasToolsType;
+  StateValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType;
+  ButtonValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType;
 }) {
   const Dispatch = useDispatch();
 
