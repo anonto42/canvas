@@ -12,12 +12,15 @@ import ToolsButton from '../BarButton/ToolsButton';
 import { VscWindow } from 'react-icons/vsc';
 import { setSelectedTool, setSelectedToolToArrow, setSelectedToolToDraw, setSelectedToolToEllipse, setSelectedToolToLine, setSelectedToolToRectangle, setSelectedToolToText, SystemCanvasToolsType } from '@/redux/slices/ToolsForSystemCanvasSlice';
 import { APICanvasToolsType, setSelectedToolOnAPI, setSelectedToolToArrowOnAPI, setSelectedToolToLineOnAPI, setSelectedToolToRectangleOnAPI } from '@/redux/slices/ToolsForAPISlice';
+import { HiTableCells } from 'react-icons/hi2';
+import { DBCanvasToolsType, setSelectedToolToArrowDB, setSelectedToolToTableDB, setSelectedToolToTextDB } from '@/redux/slices/ToolsForDBSlice';
 
 export default function LeftBar() {
 
   const artbordTab = useSelector( (state: any) => state.canvasTab.type);
   const selectedTools = useSelector( (state: any) => state.toolsForSystemCanvas.selectedTool);
   const selectedToolsAPI = useSelector( (state: any) => state.toolsForAPICanvas.selectedTool);
+  const selectedToolsDB = useSelector( (state: any) => state.toolsForDBCanvas.selectedTool);
 
   return (
     <div className='absolute h-full w-auto flex justify-center items-center'>
@@ -173,17 +176,39 @@ export default function LeftBar() {
           transition: 'left 0.3s ease-in-out', 
           left: artbordTab === CanvasType.DATABASE ? 0 : -150,
         }}
-        className='h-[470px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-7 absolute items-center cursor-pointer'>
+        className='h-[200px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-3 items-center cursor-pointer absolute'>
 
         <ToolsButton
-          key={APICanvasToolsType.ENDPOINT}
-          Icon={FaRegSquare}
+          key={DBCanvasToolsType.TABLE}
+          Icon={HiTableCells}
           IconSize={23}
-          Title="Rectangle Tool"
-          SetState={setSelectedToolToRectangle}
-          StateValue={selectedToolsAPI}
-          ButtonValue={APICanvasToolsType.ENDPOINT}
+          Title="Table Tool"
+          SetState={setSelectedToolToTableDB}
+          StateValue={selectedToolsDB}
+          ButtonValue={DBCanvasToolsType.TABLE}
           ShortCartKey="D"
+        />
+
+        <ToolsButton
+          key={DBCanvasToolsType.TEXT}
+          Icon={CiText}
+          IconSize={23}
+          Title="Text Tool"
+          SetState={setSelectedToolToTextDB}
+          StateValue={selectedToolsDB}
+          ButtonValue={DBCanvasToolsType.TEXT}
+          ShortCartKey="T"
+        />
+
+        <ToolsButton
+          key={DBCanvasToolsType.ARROW}
+          Icon={CiRoute}
+          IconSize={28}
+          Title="Arrow Tool"
+          SetState={setSelectedToolToArrowDB}
+          StateValue={selectedToolsDB}
+          ButtonValue={DBCanvasToolsType.ARROW}
+          ShortCartKey="A"
         />
 
 

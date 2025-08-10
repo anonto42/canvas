@@ -4,6 +4,7 @@ import { CanvasType } from '@/redux/slices/canvasSlice';
 import BarButton from './BarButton';
 import { APICanvasToolsType } from '@/redux/slices/ToolsForAPISlice';
 import { SystemCanvasToolsType } from '@/redux/slices/ToolsForSystemCanvasSlice';
+import { DBCanvasToolsType } from '@/redux/slices/ToolsForDBSlice';
 
 export default function ToolsButton(
 {
@@ -26,8 +27,8 @@ export default function ToolsButton(
   topBorder?: boolean;
   bottomBorder?: boolean;
   textSize?: string;
-  StateValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType;
-  ButtonValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType;
+  StateValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType | DBCanvasToolsType;
+  ButtonValue: CanvasType | SystemCanvasToolsType | APICanvasToolsType | DBCanvasToolsType;
 }){
 
   return (
