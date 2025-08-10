@@ -1,10 +1,9 @@
 "use client";
 import React from 'react'
-import { CanvasType, setTabToAPI } from '@/redux/slices/canvasSlice';
+import { CanvasType } from '@/redux/slices/canvasSlice';
 import { useSelector } from 'react-redux';
 import { LuMousePointerClick } from 'react-icons/lu';
 import { FaRegCircle, FaRegSquare } from 'react-icons/fa';
-import { IoIosArrowRoundBack } from 'react-icons/io';
 import { IoAddOutline } from 'react-icons/io5';
 import { MdOutlineDraw } from 'react-icons/md';
 import { CiRoute, CiText } from 'react-icons/ci';
@@ -23,7 +22,7 @@ export default function LeftBar() {
   const selectedToolsDB = useSelector( (state: any) => state.toolsForDBCanvas.selectedTool);
 
   return (
-    <div className='absolute h-full w-auto flex justify-center items-center'>
+    <div className='absolute h-full w-auto flex justify-center items-center z-50'>
       
 
       {/* System Canvas Tools */}
