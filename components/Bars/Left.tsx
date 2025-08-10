@@ -11,7 +11,7 @@ import { CiRoute, CiText } from 'react-icons/ci';
 import ToolsButton from '../BarButton/ToolsButton';
 import { VscWindow } from 'react-icons/vsc';
 import { setSelectedTool, setSelectedToolToArrow, setSelectedToolToDraw, setSelectedToolToEllipse, setSelectedToolToLine, setSelectedToolToRectangle, setSelectedToolToText, SystemCanvasToolsType } from '@/redux/slices/ToolsForSystemCanvasSlice';
-import { APICanvasToolsType, setSelectedToolOnAPI, setSelectedToolToArrowOnAPI, setSelectedToolToLineOnAPI, setSelectedToolToRectangleOnAPI } from '@/redux/slices/ToolsForAPISlice';
+import { APICanvasToolsType, setSelectedToolOnAPI, setSelectedToolToArrowOnAPI, setSelectedToolToRectangleOnAPI, setSelectedToolToTextOnAPI } from '@/redux/slices/ToolsForAPISlice';
 import { HiTableCells } from 'react-icons/hi2';
 import { DBCanvasToolsType, setSelectedToolToArrowDB, setSelectedToolToTableDB, setSelectedToolToTextDB } from '@/redux/slices/ToolsForDBSlice';
 
@@ -157,13 +157,13 @@ export default function LeftBar() {
         />
 
         <ToolsButton
-          key={APICanvasToolsType.ENDPOINT}
+          key={APICanvasToolsType.TEXT}
           Icon={CiText}
           IconSize={23}
           Title="Text Tool"
-          SetState={setSelectedToolToLineOnAPI}
+          SetState={setSelectedToolToTextOnAPI}
           StateValue={selectedToolsAPI}
-          ButtonValue={APICanvasToolsType.ENDPOINT}
+          ButtonValue={APICanvasToolsType.TEXT}
           ShortCartKey="T"
         />
         

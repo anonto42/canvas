@@ -5,7 +5,7 @@ export enum APICanvasToolsType {
   TABLE = 'TABLE',
   RETANGLE = 'RETANGLE',
   ARROW = 'ARROW',
-  ENDPOINT = 'ENDPOINT',
+  TEXT = 'TEXT',
 }
 
 interface APICanvasToolsState {
@@ -29,14 +29,14 @@ export const APICanvasToolsSlice = createSlice({
     setSelectedToolToArrowOnAPI: state => {
       state.selectedTool = APICanvasToolsType.ARROW
     },
-    setSelectedToolToLineOnAPI: state => {
-      state.selectedTool = APICanvasToolsType.ENDPOINT
+    setSelectedToolToTextOnAPI: state => {
+      state.selectedTool = APICanvasToolsType.TEXT
     },
   }
 })
 
 export const { 
-    setSelectedToolOnAPI, setSelectedToolToRectangleOnAPI, setSelectedToolToArrowOnAPI, setSelectedToolToLineOnAPI 
+    setSelectedToolOnAPI, setSelectedToolToRectangleOnAPI, setSelectedToolToArrowOnAPI, setSelectedToolToTextOnAPI 
   } = APICanvasToolsSlice.actions
 export const ToolsBarForAPICanvas = (state: RootState) => state.toolsForAPICanvas
 export default APICanvasToolsSlice.reducer
