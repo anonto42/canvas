@@ -1,218 +1,227 @@
 "use client";
-import React from 'react'
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { CanvasType } from '@/redux/slices/canvasSlice';
-import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { 
+  AllToolsType,
+  setSelectedTool,
+  setSelectedToolToRectangle,
+  setSelectedToolToEllipse,
+  setSelectedToolToArrow,
+  setSelectedToolToLine,
+  setSelectedToolToDraw,
+  setSelectedToolToText,
+  setSelectedToolToTable
+} from '@/redux/slices/AllTools';
+
+// Icons
 import { LuMousePointerClick } from 'react-icons/lu';
-import { FaRegCircle, FaRegSquare } from 'react-icons/fa';
+import { FaRegCircle, FaRegSquare, FaTable } from 'react-icons/fa';
 import { IoAddOutline } from 'react-icons/io5';
 import { MdOutlineDraw } from 'react-icons/md';
 import { CiRoute, CiText } from 'react-icons/ci';
 import ToolsButton from '../BarButton/ToolsButton';
-import { VscWindow } from 'react-icons/vsc';
-import { setSelectedTool, setSelectedToolToArrow, setSelectedToolToDraw, setSelectedToolToEllipse, setSelectedToolToLine, setSelectedToolToRectangle, setSelectedToolToText, SystemCanvasToolsType } from '@/redux/slices/ToolsForSystemCanvasSlice';
-import { APICanvasToolsType, setSelectedToolOnAPI, setSelectedToolToArrowOnAPI, setSelectedToolToRectangleOnAPI, setSelectedToolToTextOnAPI } from '@/redux/slices/ToolsForAPISlice';
 import { HiTableCells } from 'react-icons/hi2';
-import { DBCanvasToolsType, setSelectedToolToArrowDB, setSelectedToolToTableDB, setSelectedToolToTextDB } from '@/redux/slices/ToolsForDBSlice';
+
+const TOOLBAR_STYLE = 'w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid items-center cursor-pointer absolute';
 
 export default function LeftBar() {
+  const dispatch = useDispatch();
+  const artbordTab = useSelector((state: RootState) => state.canvasTab.type);
+  const systemTool = useSelector((state: RootState) => state.allTools.selectedTool);
+  const apiTool = useSelector((state: RootState) => state.allTools.selectedToolForAPI);
+  const dbTool = useSelector((state: RootState) => state.allTools.selectedToolForDB);
 
-  const artbordTab = useSelector( (state: any) => state.canvasTab.type);
-  const selectedTools = useSelector( (state: any) => state.toolsForSystemCanvas.selectedTool);
-  const selectedToolsAPI = useSelector( (state: any) => state.toolsForAPICanvas.selectedTool);
-  const selectedToolsDB = useSelector( (state: any) => state.toolsForDBCanvas.selectedTool);
+  const getToolbarPosition = (type: CanvasType) => ({
+    transition: 'left 0.3s ease-in-out',
+    left: artbordTab === type ? 0 : -150,
+  });
 
   return (
     <div className='absolute h-full w-auto flex justify-center items-center z-50'>
-      
-
-      {/* System Canvas Tools */}
+      {/* SYSTEM CANVAS TOOLS */}
       <div
-        style={{
-          transition: 'left 0.3s ease-in-out', 
-          left: artbordTab === CanvasType.SYSTEM ? 0 : -150,
-        }}
-        className='h-[470px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-7 items-center cursor-pointer absolute'
-        >
-
+        style={getToolbarPosition(CanvasType.SYSTEM)}
+        className={`${TOOLBAR_STYLE} h-[470px] grid-rows-8`}
+      >
         <ToolsButton
-          key={SystemCanvasToolsType.SELECTION}
+          key={AllToolsType.SELECTION}
           Icon={LuMousePointerClick}
           IconSize={24}
           Title="Selection Tool"
-          SetState={setSelectedTool}
-          StateValue={selectedTools}
-          ButtonValue={SystemCanvasToolsType.SELECTION}
+          SetState={() => dispatch(setSelectedTool())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.SELECTION}
           ShortCartKey="S"
         />
 
         <ToolsButton
-          key={SystemCanvasToolsType.RECTANGLE}
+          key={AllToolsType.RECTANGLE}
           Icon={FaRegSquare}
           IconSize={23}
           Title="Rectangle Tool"
-          SetState={setSelectedToolToRectangle}
-          StateValue={selectedTools}
-          ButtonValue={SystemCanvasToolsType.RECTANGLE}
+          SetState={() => dispatch(setSelectedToolToRectangle())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.RECTANGLE}
           ShortCartKey="R"
         />
 
         <ToolsButton
-          key={SystemCanvasToolsType.ELLIPSE}
+          key={AllToolsType.ELLIPSE}
           Icon={FaRegCircle}
           IconSize={23}
           Title="Ellipse Tool"
-          SetState={setSelectedToolToEllipse}
-          StateValue={selectedTools}
-          ButtonValue={SystemCanvasToolsType.ELLIPSE}
+          SetState={() => dispatch(setSelectedToolToEllipse())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.ELLIPSE}
           ShortCartKey="E"
         />
 
         <ToolsButton
-          key={SystemCanvasToolsType.ARROW}
+          key={AllToolsType.TABLE}
+          Icon={FaTable}
+          IconSize={23}
+          Title="Table Tool"
+          SetState={() => dispatch(setSelectedToolToTable())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.TABLE}
+          ShortCartKey="T"
+        />
+
+        <ToolsButton
+          key={AllToolsType.ARROW}
           Icon={CiRoute}
           IconSize={30}
           Title="Arrow Tool"
-          SetState={setSelectedToolToArrow}
-          StateValue={selectedTools}
-          ButtonValue={SystemCanvasToolsType.ARROW}
+          SetState={() => dispatch(setSelectedToolToArrow())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.ARROW}
           ShortCartKey="A"
         />
 
         <ToolsButton
-          key={SystemCanvasToolsType.LINE}
+          key={AllToolsType.LINE}
           Icon={IoAddOutline}
           IconSize={32}
           Title="Line Tool"
-          SetState={setSelectedToolToLine}
-          StateValue={selectedTools}
-          ButtonValue={SystemCanvasToolsType.LINE}
+          SetState={() => dispatch(setSelectedToolToLine())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.LINE}
           ShortCartKey="L"
         />
 
         <ToolsButton
-          key={SystemCanvasToolsType.DRAW}
+          key={AllToolsType.DRAW}
           Icon={MdOutlineDraw}
           IconSize={24}
           Title="Draw Tool"
-          SetState={setSelectedToolToDraw}
-          StateValue={selectedTools}
-          ButtonValue={SystemCanvasToolsType.DRAW}
+          SetState={() => dispatch(setSelectedToolToDraw())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.DRAW}
           ShortCartKey="D"
         />
 
         <ToolsButton
-          key={SystemCanvasToolsType.TEXT}
+          key={AllToolsType.TEXT}
           Icon={CiText}
           IconSize={24}
           Title="Text Tool"
-          SetState={setSelectedToolToText}
-          StateValue={selectedTools}
-          ButtonValue={SystemCanvasToolsType.TEXT}
-          ShortCartKey="T"
+          SetState={() => dispatch(setSelectedToolToText())}
+          StateValue={systemTool}
+          ButtonValue={AllToolsType.TEXT}
+          ShortCartKey="X"
         />
-
       </div>
 
-      {/* API Canvas Tools */}
-      <div 
-        style={{
-          transition: 'left 0.3s ease-in-out', 
-          left: artbordTab === CanvasType.API ? 0 : -150,
-        }}
-        className='h-[268.572px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-4 items-center cursor-pointer absolute'>
-    
+      {/* API CANVAS TOOLS */}
+      <div
+        style={getToolbarPosition(CanvasType.API)}
+        className={`${TOOLBAR_STYLE} h-[268px] grid-rows-4`}
+      >
         <ToolsButton
-          key={APICanvasToolsType.TABLE}
-          Icon={VscWindow}
+          key="API_TABLE"
+          Icon={FaTable}
           IconSize={24}
           Title="Table Tool"
-          SetState={setSelectedToolOnAPI}
-          StateValue={selectedToolsAPI}
-          ButtonValue={APICanvasToolsType.TABLE}
+          SetState={() => dispatch(setSelectedToolToTable())}
+          StateValue={apiTool}
+          ButtonValue={AllToolsType.TABLE}
           ShortCartKey="W"
-          textSize="text-[10px]"
         />
 
         <ToolsButton
-          key={APICanvasToolsType.RETANGLE}
+          key="API_RECTANGLE"
           Icon={FaRegSquare}
           IconSize={23}
           Title="Rectangle Tool"
-          SetState={setSelectedToolToRectangleOnAPI}
-          StateValue={selectedToolsAPI}
-          ButtonValue={APICanvasToolsType.RETANGLE}
+          SetState={() => dispatch(setSelectedToolToRectangle())}
+          StateValue={apiTool}
+          ButtonValue={AllToolsType.RECTANGLE}
           ShortCartKey="R"
         />
 
         <ToolsButton
-          key={APICanvasToolsType.ARROW}
+          key="API_ARROW"
           Icon={CiRoute}
           IconSize={30}
           Title="Arrow Tool"
-          SetState={setSelectedToolToArrowOnAPI}
-          StateValue={selectedToolsAPI}
-          ButtonValue={APICanvasToolsType.ARROW}
+          SetState={() => dispatch(setSelectedToolToArrow())}
+          StateValue={apiTool}
+          ButtonValue={AllToolsType.ARROW}
           ShortCartKey="A"
         />
 
         <ToolsButton
-          key={APICanvasToolsType.TEXT}
+          key="API_TEXT"
           Icon={CiText}
           IconSize={23}
           Title="Text Tool"
-          SetState={setSelectedToolToTextOnAPI}
-          StateValue={selectedToolsAPI}
-          ButtonValue={APICanvasToolsType.TEXT}
+          SetState={() => dispatch(setSelectedToolToText())}
+          StateValue={apiTool}
+          ButtonValue={AllToolsType.TEXT}
           ShortCartKey="T"
         />
-        
-
       </div>
 
-      {/* DB Canvas Tools */}
-      <div 
-        style={{
-          transition: 'left 0.3s ease-in-out', 
-          left: artbordTab === CanvasType.DATABASE ? 0 : -150,
-        }}
-        className='h-[200px] w-[50px] ml-[15px] rounded-full border-1 border-[#f3f3f3] bg-[#00226d33] overflow-hidden grid grid-rows-3 items-center cursor-pointer absolute'>
-
+      {/* DATABASE CANVAS TOOLS */}
+      <div
+        style={getToolbarPosition(CanvasType.DATABASE)}
+        className={`${TOOLBAR_STYLE} h-[200px] grid-rows-3`}
+      >
         <ToolsButton
-          key={DBCanvasToolsType.TABLE}
+          key="DB_TABLE"
           Icon={HiTableCells}
           IconSize={23}
           Title="Table Tool"
-          SetState={setSelectedToolToTableDB}
-          StateValue={selectedToolsDB}
-          ButtonValue={DBCanvasToolsType.TABLE}
+          SetState={() => dispatch(setSelectedToolToTable())}
+          StateValue={dbTool}
+          ButtonValue={AllToolsType.TABLE}
           ShortCartKey="D"
         />
 
         <ToolsButton
-          key={DBCanvasToolsType.TEXT}
+          key="DB_TEXT"
           Icon={CiText}
           IconSize={23}
           Title="Text Tool"
-          SetState={setSelectedToolToTextDB}
-          StateValue={selectedToolsDB}
-          ButtonValue={DBCanvasToolsType.TEXT}
+          SetState={() => dispatch(setSelectedToolToText())}
+          StateValue={dbTool}
+          ButtonValue={AllToolsType.TEXT}
           ShortCartKey="T"
         />
 
         <ToolsButton
-          key={DBCanvasToolsType.ARROW}
+          key="DB_ARROW"
           Icon={CiRoute}
           IconSize={28}
           Title="Arrow Tool"
-          SetState={setSelectedToolToArrowDB}
-          StateValue={selectedToolsDB}
-          ButtonValue={DBCanvasToolsType.ARROW}
+          SetState={() => dispatch(setSelectedToolToArrow())}
+          StateValue={dbTool}
+          ButtonValue={AllToolsType.ARROW}
           ShortCartKey="A"
         />
-
-
       </div>
-
     </div>
-  )
+  );
 }

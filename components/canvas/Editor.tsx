@@ -1,195 +1,210 @@
-import { Canvas, Ellipse, Line, Rect, Textbox, Triangle, Group } from "fabric";
+"use client";
+import { Canvas, Ellipse, Line, Rect, Textbox, Triangle, Group, Object as FabricObject } from "fabric";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { AllToolsType } from  "@/redux/slices/AllTools";
 
 export default function CanvasEditor() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [canvas, setCanvas] = useState<Canvas | null>(null);
 
-  // Example: Your selectors for currently selected tool & artboard type
-  const artbordTab = useSelector((state: any) => state.canvasTab.type);
-  const selectedTools = useSelector((state: any) => state.toolsForSystemCanvas.selectedTool);
-  const selectedToolsAPI = useSelector((state: any) => state.toolsForAPICanvas.selectedTool);
-  const selectedToolsDB = useSelector((state: any) => state.toolsForDBCanvas.selectedTool);
+  // Get current tool from Redux store
+  const selectedTool = useSelector((state: RootState) => state.allTools.selectedTool);
+  const artbordTab = useSelector((state: RootState) => state.canvasTab.type);
 
+  // Responsive canvas sizing
   const updateCanvasSize = (fabricCanvas: Canvas) => {
-    const width = document.documentElement.clientWidth;
-    const height = document.documentElement.clientHeight;
-    fabricCanvas.setWidth(width);
-    fabricCanvas.setHeight(height);
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    fabricCanvas.setDimensions({ width, height });
     fabricCanvas.renderAll();
   };
 
-  // Add shape for all your cases
-  const addShapeByCommand = (command: string, fabricCanvas: Canvas) => {
+  // Enhanced shape creation with better typing
+  const addShapeByTool = (tool: AllToolsType, fabricCanvas: Canvas) => {
     if (!fabricCanvas) return;
 
-    const shapeType = command.trim().toUpperCase();
+    const center = {
+      x: fabricCanvas.getWidth() / 2,
+      y: fabricCanvas.getHeight() / 2
+    };
 
-    let shape: fabric.Object | null = null;
+    let shape: FabricObject | Group | null = null;
 
-    switch (shapeType) {
-      case "SELECTION":
+    switch (tool) {
+      case AllToolsType.SELECTION:
+        fabricCanvas.selection = true;
+        fabricCanvas.isDrawingMode = false;
         return;
 
-      case "RECTANGLE":
-      case "RETANGLE":
+      case AllToolsType.RECTANGLE:
         shape = new Rect({
-          left: 100,
-          top: 100,
+          left: center.x - 75,
+          top: center.y - 50,
           width: 150,
           height: 100,
-          fill: "rgba(0, 128, 255, 0.5)",
-          stroke: "blue",
+          fill: 'rgba(0, 128, 255, 0.5)',
+          stroke: 'blue',
           strokeWidth: 2,
         });
         break;
 
-      case "ELLIPSE":
+      case AllToolsType.ELLIPSE:
         shape = new Ellipse({
-          left: 150,
-          top: 150,
+          left: center.x,
+          top: center.y,
           rx: 75,
           ry: 50,
-          fill: "rgba(255, 0, 128, 0.5)",
-          stroke: "red",
+          fill: 'rgba(255, 0, 128, 0.5)',
+          stroke: 'red',
           strokeWidth: 2,
-        });
-        break;
-
-      case "LINE":
-        shape = new Line([50, 50, 200, 200], {
-          stroke: "green",
-          strokeWidth: 3,
-        });
-        break;
-
-      case "ARROW":
-        const arrowLine = new Line([50, 50, 200, 50], {
-          stroke: "orange",
-          strokeWidth: 3,
           originX: 'center',
           originY: 'center'
         });
+        break;
+
+      case AllToolsType.LINE:
+        shape = new Line(
+          [center.x - 100, center.y, center.x + 100, center.y], 
+          {
+            stroke: 'green',
+            strokeWidth: 3,
+          }
+        );
+        break;
+
+      case AllToolsType.ARROW:
+        const arrowLine = new Line(
+          [center.x - 100, center.y, center.x + 80, center.y], 
+          {
+            stroke: 'orange',
+            strokeWidth: 3,
+          }
+        );
         const arrowHead = new Triangle({
-          width: 10,
-          height: 15,
-          fill: "orange",
-          left: 200,
-          top: 50,
+          width: 20,
+          height: 20,
+          fill: 'orange',
+          left: center.x + 80,
+          top: center.y,
           angle: 90,
           originX: 'center',
           originY: 'center',
         });
-        const arrow = new Group([arrowLine, arrowHead], {
-          left: 50,
-          top: 50,
+        shape = new Group([arrowLine, arrowHead], {
+          originX: 'center',
+          originY: 'center',
         });
-        shape = arrow;
         break;
 
-      case "TEXT":
-        shape = new Textbox("Sample Text", {
-          left: 100,
-          top: 100,
+      case AllToolsType.TEXT:
+        shape = new Textbox('Double click to edit', {
+          left: center.x,
+          top: center.y,
           width: 200,
           fontSize: 20,
-          fill: "#333",
+          fill: '#333',
+          originX: 'center',
+          originY: 'center',
+          editable: true,
         });
         break;
 
-      case "TABLE":
-        const cellWidth = 100;
-        const cellHeight = 40;
+      case AllToolsType.TABLE:
+        const cellWidth = 80;
+        const cellHeight = 30;
         const rows = 3;
-        const cols = 3;
-        const cells: fabric.Object[] = [];
-        for(let r=0; r < rows; r++){
-          for(let c=0; c < cols; c++){
-            const rect = new Rect({
-              left: c * cellWidth,
-              top: r * cellHeight,
-              width: cellWidth,
-              height: cellHeight,
-              fill: 'white',
-              stroke: 'black',
-              strokeWidth: 1,
-              selectable: false
-            });
-            cells.push(rect);
+        const cols = 4;
+        const cells: FabricObject[] = [];
+        
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            cells.push(
+              new Rect({
+                left: c * cellWidth,
+                top: r * cellHeight,
+                width: cellWidth,
+                height: cellHeight,
+                fill: r === 0 ? '#f0f0f0' : 'white',
+                stroke: '#ddd',
+                strokeWidth: 1,
+              })
+            );
+            if (r === 0 || c === 0) {
+              cells.push(
+                new Textbox(r === 0 ? `Col ${c+1}` : `Row ${r+1}`, {
+                  left: c * cellWidth + cellWidth/2,
+                  top: r * cellHeight + cellHeight/2,
+                  fontSize: 10,
+                  originX: 'center',
+                  originY: 'center',
+                  selectable: false,
+                }
+              )
+              )
+            }
           }
         }
-        const table = new Group(cells, {
-          left: 100,
-          top: 100,
+        shape = new Group(cells, {
+          left: center.x - (cols * cellWidth)/2,
+          top: center.y - (rows * cellHeight)/2,
         });
-        shape = table;
         break;
 
-      case "DRAW":
+      case AllToolsType.DRAW:
         fabricCanvas.isDrawingMode = !fabricCanvas.isDrawingMode;
+        fabricCanvas.selection = !fabricCanvas.isDrawingMode;
         return;
 
       default:
-        console.warn("Unknown shape type:", shapeType);
+        console.warn(`Unknown tool: ${tool}`);
         return;
     }
 
     if (shape) {
       fabricCanvas.add(shape);
+      fabricCanvas.setActiveObject(shape);
       fabricCanvas.requestRenderAll();
     }
   };
 
+  // Initialize canvas
   useEffect(() => {
-    if (canvasRef.current) {
-      const fabricCanvas = new Canvas(canvasRef.current, {
-        backgroundColor: "#232323",
-        selection: true,
-      });
+    if (!canvasRef.current) return;
 
-      updateCanvasSize(fabricCanvas);
-      setCanvas(fabricCanvas);
+    const fabricCanvas = new Canvas(canvasRef.current, {
+      backgroundColor: '#232323',
+      selection: true,
+      preserveObjectStacking: true,
+    });
 
-      const handleResize = () => {
-        updateCanvasSize(fabricCanvas);
-      };
+    setCanvas(fabricCanvas);
+    updateCanvasSize(fabricCanvas);
 
-      window.addEventListener("resize", handleResize);
+    const handleResize = () => updateCanvasSize(fabricCanvas);
+    window.addEventListener('resize', handleResize);
 
-      return () => {
-        window.removeEventListener("resize", handleResize);
-        fabricCanvas.dispose();
-      };
-    }
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      fabricCanvas.dispose();
+    };
   }, []);
 
+  // Handle adding shapes based on current tool
   const handleAddShape = () => {
-    let toolToUse: string | null = null;
-    switch (artbordTab) {
-      case "SYSTEM":
-        toolToUse = selectedTools;
-        break;
-      case "API":
-        toolToUse = selectedToolsAPI;
-        break;
-      case "DATABASE":
-        toolToUse = selectedToolsDB;
-        break;
-    }
-    if (toolToUse && canvas) {
-      addShapeByCommand(toolToUse, canvas);
-    }
+    if (!canvas) return;
+    addShapeByTool(selectedTool, canvas);
   };
 
   return (
-    <div className="fixed top-0 left-0 w-screen h-screen z-0 overflow-hidden">
-      <canvas id="canvas" ref={canvasRef} />
+    <div className="fixed inset-0 z-0">
+      <canvas ref={canvasRef} className="w-full h-full" />
       <button
         onClick={handleAddShape}
-        className="absolute top-5 right-5 bg-blue-600 text-white px-4 py-2 rounded z-10"
+        className="absolute top-4 right-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-md z-10 transition-colors"
       >
-        Add Shape
+        Add Current Tool
       </button>
     </div>
   );
